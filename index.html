@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LegalEase - Legal Document & Compliance Advisor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1>LegalEase</h1>
+                <p class="subtitle">Legal Document & Compliance Advisor</p>
+            </div>
+        </header>
+
+        <!-- Mandatory Disclaimer Modal (blocks access until accepted) -->
+        <div id="disclaimerModal" class="modal mandatory-disclaimer">
+            <div class="modal-content disclaimer-modal-content">
+                <h2>Legal Disclaimer</h2>
+                <div class="disclaimer-text">{{ disclaimer|safe }}</div>
+                <div class="disclaimer-actions">
+                    <button class="btn-primary" id="acceptDisclaimerBtn" type="button" onclick="window.acceptDisclaimer && window.acceptDisclaimer()">I Accept and Agree</button>
+                    <p class="disclaimer-required">You must accept the disclaimer to use LegalEase</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Clear Conversation Confirmation Modal -->
+        <div id="clearConfirmModal" class="modal">
+            <div class="modal-content confirm-modal-content">
+                <h2>Clear Conversation</h2>
+                <p>Do you want to clear the conversation?</p>
+                <div class="confirm-actions">
+                    <button class="btn-confirm-no" id="clearCancelBtn" type="button" onclick="window.hideClearConfirmModal && window.hideClearConfirmModal()">No</button>
+                    <button class="btn-confirm-yes" id="clearConfirmBtn" type="button" onclick="window.confirmClearConversation && window.confirmClearConversation()">Yes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content-wrapper">
+            <!-- Sidebar with Legal Features -->
+            <aside class="sidebar" id="sidebar">
+                <div class="sidebar-header">
+                    <h3>Legal Tools</h3>
+                    <button class="sidebar-toggle" id="sidebarToggle" title="Toggle sidebar">Menu</button>
+                </div>
+                
+                <div class="sidebar-content">
+                    <!-- Quick Actions -->
+                    <div class="sidebar-section">
+                        <h4 class="section-title">Quick Actions</h4>
+                        <div class="quick-actions">
+                            <button class="quick-action-btn" data-action="template-nda">
+                                <span class="action-icon"></span>
+                                <span class="action-text">NDA Template</span>
+                            </button>
+                            <button class="quick-action-btn" data-action="template-employment">
+                                <span class="action-icon"></span>
+                                <span class="action-text">Employment Contract</span>
+                            </button>
+                            <button class="quick-action-btn" data-action="template-privacy">
+                                <span class="action-icon"></span>
+                                <span class="action-text">Privacy Policy</span>
+                            </button>
+                            <button class="quick-action-btn" data-action="glossary">
+                                <span class="action-icon"></span>
+                                <span class="action-text">Legal Dictionary</span>
+                            </button>
+                            <button class="quick-action-btn" data-action="cite">
+                                <span class="action-icon"></span>
+                                <span class="action-text">Format Citation</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Legal Templates -->
+                    <div class="sidebar-section">
+                        <h4 class="section-title">Document Templates</h4>
+                        <div class="template-list" id="templateList">
+                            <!-- Templates will be loaded dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Legal Glossary -->
+                    <div class="sidebar-section">
+                        <h4 class="section-title">Legal Terms</h4>
+                        <div class="glossary-search">
+                            <input type="text" id="glossarySearch" placeholder="Search legal terms..." class="search-input">
+                        </div>
+                        <div class="glossary-list" id="glossaryList">
+                            <!-- Glossary terms will be loaded dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Chat Container -->
+            <div class="chat-container">
+                <div id="chatMessages" class="chat-messages">
+                    <div class="welcome-message">
+                        <h2>Welcome to LegalEase</h2>
+                        <p>Your comprehensive legal assistant for document analysis, compliance, and legal guidance.</p>
+                        <div class="features">
+                            <div class="feature-item">
+                                <strong>Document Analysis</strong>
+                                <p>Paste or upload legal documents for structured analysis with risk assessment</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Legal Questions</strong>
+                                <p>Ask questions about contracts, employment, IP, compliance, and more</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Document Templates</strong>
+                                <p>Access ready-to-use templates for NDAs, contracts, privacy policies</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Legal Dictionary</strong>
+                                <p>Search and understand legal terminology with clear definitions</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Citation Formatter</strong>
+                                <p>Format legal citations in proper Bluebook or standard style</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Category Tags</strong>
+                                <p>Automatic categorization by area of law (Contract, Employment, IP, etc.)</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Risk Assessment</strong>
+                                <p>Get risk scores and actionable recommendations for legal matters</p>
+                            </div>
+                            <div class="feature-item">
+                                <strong>Quick Actions</strong>
+                                <p>Fast access to common legal tasks and document templates</p>
+                            </div>
+                        </div>
+                        <p style="margin-top: 2rem; color: var(--text-secondary); font-size: 0.9rem;">
+                            <strong>Tip:</strong> Use the sidebar to access templates, glossary, and quick actions. All responses are for informational purposes only and not legal advice.
+                        </p>
+                    </div>
+                </div>
+
+            <!-- Input Area (disabled until disclaimer accepted) -->
+            <div class="input-container" id="inputContainer">
+                <div class="input-tabs">
+                    <button class="tab-btn active" id="textTab" disabled>Text Input</button>
+                    <button class="tab-btn" id="documentTab" disabled>Document Upload</button>
+                </div>
+                
+                <div id="textInputSection" class="input-section active">
+                    <div class="textarea-wrapper">
+                        <textarea 
+                            id="messageInput" 
+                            placeholder="Please accept the disclaimer first to use LegalEase..."
+                            rows="4"
+                            disabled
+                        ></textarea>
+                        <button id="sendBtn" class="btn-send-inside" disabled>
+                            <span class="send-icon">➤</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="documentInputSection" class="input-section">
+                    <div class="upload-area" id="uploadArea">
+                        <input type="file" id="fileInput" accept=".txt,.doc,.docx,.pdf" style="display: none;" disabled>
+                        <p class="upload-text">
+                            <strong>Click to upload</strong> or drag and drop
+                        </p>
+                        <p class="upload-hint">Supports: TXT, DOC, DOCX, PDF (or paste text below)</p>
+                    </div>
+                    <div class="textarea-wrapper">
+                        <textarea 
+                            id="documentPaste" 
+                            placeholder="Please accept the disclaimer first to use LegalEase..."
+                            rows="6"
+                            disabled
+                        ></textarea>
+                        <button id="analyzeBtn" class="btn-send-inside" disabled>
+                            <span class="send-icon">➤</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="chat-controls">
+                    <button id="clearBtn" class="btn-secondary" disabled>Clear Conversation</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div id="loadingIndicator" class="loading-indicator hidden">
+            <div class="spinner"></div>
+            <p>Analyzing with LegalEase...</p>
+        </div>
+
+        <!-- Template Modal -->
+        <div id="templateModal" class="modal">
+            <div class="modal-content template-modal-content">
+                <span class="close-modal" id="closeTemplateModal">&times;</span>
+                <h2 id="templateModalTitle">Document Template</h2>
+                <div class="template-category" id="templateCategory"></div>
+                <div class="template-description" id="templateDescription"></div>
+                <div class="template-content-wrapper">
+                    <textarea id="templateContent" readonly class="template-textarea"></textarea>
+                    <button class="btn-primary" id="copyTemplateBtn">Copy Template</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Glossary Modal -->
+        <div id="glossaryModal" class="modal">
+            <div class="modal-content glossary-modal-content">
+                <span class="close-modal" id="closeGlossaryModal">&times;</span>
+                <h2 id="glossaryModalTitle">Legal Term</h2>
+                <div class="term-definition" id="termDefinition"></div>
+                <div class="term-example" id="termExample"></div>
+            </div>
+        </div>
+
+        <!-- Citation Modal -->
+        <div id="citationModal" class="modal">
+            <div class="modal-content citation-modal-content">
+                <span class="close-modal" id="closeCitationModal">&times;</span>
+                <h2>Format Legal Citation</h2>
+                <div class="citation-input-wrapper">
+                    <textarea id="citationInput" placeholder="Enter citation text to format..." rows="3"></textarea>
+                    <button class="btn-primary" id="formatCitationBtn">Format Citation</button>
+                </div>
+                <div id="citationResult" class="citation-result hidden"></div>
+            </div>
+        </div>
+
+        <!-- Toast Notification Container -->
+        <div id="toastContainer" class="toast-container"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
