@@ -283,23 +283,11 @@ legal chatbot/
         └── app.js      # Frontend JavaScript
 ```
 
----
-
-## Quick Start Summary
-
-**3 Steps to Get Running:**
 
 1. **Install:** `pip install -r requirements.txt`
 2. **Configure:** Edit `config.py` and add your Gemini API key
 3. **Run:** `python app.py` → Open `http://localhost:3000` in browser
 
-**To Test:**
-
-1. Type a legal question → Click "Send" → Verify AI response
-2. Upload a document → Click "Analyze" → Verify structured analysis
-3. Ask follow-up question → Verify context is maintained
-
----
 
 ## Important Notes
 
@@ -309,24 +297,5 @@ legal chatbot/
 - **Browser Only:** This is a local web app - only accessible on your computer
 - **Legal Disclaimer:** This is advisory only, not a substitute for professional legal counsel
 
----
 
-## Features
-
-- **Document Analysis:** Upload or paste legal documents
-- **Text Questions:** Ask legal questions in plain language
-- **Multi-turn Conversations:** Context-aware follow-up questions
-- **Structured Output:** Clear explanations with key points, risks, and recommendations
-- **Risk Assessment:** Automatic risk scoring (Low/Medium/High)
-- **No Database:** Session-based storage, no database needed
-- **Responsive Design:** Works on desktop, tablet, and mobile
-
----
-
-**Need Help?** Check the troubleshooting section above or review the error messages in your terminal and browser console.
-
-**Ready to test?** Follow Step 1-5 above!
-
-
- pip install --upgrade google-generativeai
  
